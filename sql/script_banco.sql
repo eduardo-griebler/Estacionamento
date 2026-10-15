@@ -76,19 +76,21 @@ begin
     where id = in_movimentacao_id;
 		
 end //
-delimiter ;
+DELIMITER $$
 
-create trigger trg_validar_entrada_duplicada
-before insert on movimentacoes
-for each row
-begin
-	if exists(
-		select 1
-		from movimentacoes
-		where veiculo_id = new.veiculo_id
-		and status = 'No Pátio'
-	) then
-		signal sqlstate '45000'
-		set message_text = 'Bloqueado: Este veículo já se encontra estacionado no pátio!';
-	end if;
-end
+CREATE TRIGGER trg_validar_entrada_duplicada
+BEFORE INSERT ON movimentacoes
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM movimentacoes
+        WHERE veiculo_id = NEW.veiculo_id
+        AND status = 'No Pátio'
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Bloqueado: Este veículo já se encontra estacionado no pátio!';
+    END IF;
+END$$
+
+DELIMITER ;

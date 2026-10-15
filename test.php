@@ -1,7 +1,7 @@
 <?php
 
 // 1. Inclua o arquivo database.php (ajuste o caminho se necessário)
-require_once 'config/database.php';
+require_once 'app/Models/database.php';
 
 // 2. Use o namespace correto da sua classe
 use App\Models\database;
