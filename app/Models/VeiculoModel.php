@@ -49,4 +49,15 @@ class VeiculoModel
                         return false;
                 }
         }
+
+        // Busca todos os veículos cadastrados no banco
+        public function listarCadastrados(): array
+        {
+                $sql = "SELECT id, placa, modelo, tipo FROM veiculos ORDER BY id DESC";
+
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute();
+
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
 }

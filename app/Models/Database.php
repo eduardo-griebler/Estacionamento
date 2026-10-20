@@ -14,7 +14,7 @@ class Database
         {
                 if (self::$instance === null) {
                         $host = 'localhost';
-                        $port = 3307;
+                        $port = 3306;
                         $db = 'db_estacionamento';
                         $user = 'root';
                         $pass = '';
