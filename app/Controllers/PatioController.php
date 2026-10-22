@@ -63,7 +63,7 @@ class PatioController
                         try {
                                 $movimentacaoModel = new MovimentacaoModel();
 
-                                $valorHora = 10;
+                                $valorHora = 4.50;
 
                                 $registrou = $movimentacaoModel->registrarSaida(
                                         $id_movimentacao,
@@ -107,13 +107,20 @@ class PatioController
 
                                 // Executa o cadastro enviando as strings validadas
 
-                                $resultado = $veiculo->cadastrarVeiculo($placa, $modelo, $tipo);
 
-                                if ($resultado === true) {
-                                        header('Location: index.php?cadastro=sucesso');
-                                        exit;
-                                } else {
-                                        header('Location: index.php?cadastro=erro');
+                                try {
+                                        $resultado = $veiculo->cadastrarVeiculo($placa, $modelo, $tipo);
+
+
+                                        if ($resultado === true) {
+                                                header('Location: index.php?cadastro=sucesso');
+                                                exit;
+                                        } else {
+                                                header('Location: index.php?cadastro=erro');
+                                                exit;
+                                        }
+                                } catch (\DomainException $e) {
+                                        header('Location: index.php?cadastro=duplicado');
                                         exit;
                                 }
                         }

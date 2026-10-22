@@ -46,6 +46,20 @@ class VeiculoModel
                         ]);
                         //pega uma exceção PDO permitindo tratar o erro
                 } catch (PDOException $e) {
+
+                        // Recupera o código do erro do MySQL
+                        $errorCode = $e->errorInfo[1] ?? null;
+
+                        if ($errorCode === 1062) {
+
+                                // Identifica uma tentativa de cadastro duplicado
+                                throw new \DomainException("Esta placa já está cadastrada no sistema.");
+                        } else {
+
+                                // Registra outros erros no log do servidor
+                                error_log("Erro ao cadastrar veículo: " . $e->getMessage());
+                        }
+
                         return false;
                 }
         }
@@ -53,7 +67,7 @@ class VeiculoModel
         // Busca todos os veículos cadastrados no banco
         public function listarCadastrados(): array
         {
-                $sql = "SELECT id, placa, modelo, tipo FROM veiculos ORDER BY id DESC";
+                $sql = "SELECT id, placa, modelo, tipo FROM veiculos ORDER BY id ";
 
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute();

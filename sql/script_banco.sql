@@ -30,16 +30,20 @@ CREATE TABLE movimentacoes (
         REFERENCES veiculos(id)
 );
 
-create view  vw_veiculos_no_patio as select 
-	mov.id as movimentacao_id,
-	v.placa as placa,
-	v.modelo as modelo,
-	v.tipo as tipo,
-    date_format(mov.data_entrada, '%d/%m/%Y %H:%i') as data_entrada_formatada,
-	(timestampdiff(minute, mov.data_entrada, now()) / 60) as hora_decorridas
-from movimentacoes mov
-join veiculos v on mov.veiculo_id = v.id
-where mov.status = 'No Pátio';
+
+CREATE VIEW vw_veiculos_no_patio AS
+SELECT
+    mov.id AS movimentacao_id,
+    mov.data_entrada,
+    v.placa AS placa,
+    v.modelo AS modelo,
+    v.tipo AS tipo,
+    DATE_FORMAT(mov.data_entrada, '%d/%m/%Y %H:%i') AS data_entrada_formatada,
+    (TIMESTAMPDIFF(MINUTE, mov.data_entrada, NOW()) / 60) AS hora_decorridas
+FROM movimentacoes mov
+JOIN veiculos v ON mov.veiculo_id = v.id
+WHERE mov.status = 'No Pátio';
+
 
 delimiter //
 create procedure sp_registrar_saida(
