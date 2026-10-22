@@ -29,11 +29,10 @@ class MovimentacaoModel
             }
 
             throw $e;
-
         }
     }
 
-    public function registrarSaida(int $id_movimentacao, int $valorHora): bool
+    public function registrarSaida(int $id_movimentacao, float $valorHora): bool
     {
         $stmt = $this->db->prepare("call sp_registrar_saida(:id_movimentacao, :valor_hora)");
         return $stmt->execute([
@@ -47,6 +46,4 @@ class MovimentacaoModel
         $stmt = $this->db->query('SELECT * FROM vw_veiculos_no_patio');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
 }

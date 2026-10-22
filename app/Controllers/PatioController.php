@@ -43,6 +43,47 @@ class PatioController
                         }
                 }
 
+                if (
+                        $_SERVER['REQUEST_METHOD'] === 'POST' &&
+                        ($_POST['acao'] ?? '') === 'registrar_saida'
+                ) {
+
+                        $id_movimentacao = filter_input(
+                                INPUT_POST,
+                                'id_movimentacao',
+                                FILTER_VALIDATE_INT
+                        );
+
+                        if (
+                                $id_movimentacao === false || $id_movimentacao === null || $id_movimentacao <= 0
+                        ) {
+                                exit("ID da movimentação inválido.");
+                        }
+
+                        try {
+                                $movimentacaoModel = new MovimentacaoModel();
+
+                                $valorHora = 10;
+
+                                $registrou = $movimentacaoModel->registrarSaida(
+                                        $id_movimentacao,
+                                        $valorHora
+                                );
+
+                                if (!$registrou) {
+                                        throw new \RuntimeException(
+                                                "Falha ao registrar saída."
+                                        );
+                                }
+
+                                header("Location: index.php?saida=sucesso");
+                                exit;
+                        } catch (\Exception $e) {
+                                error_log($e->getMessage());
+                                $mensagemErro = "Não foi possível registrar a saída.";
+                        }
+                }
+
                 // Busca os veículos cadastrados
                 $veiculoModel = new VeiculoModel();
                 $veiculosCadastrados = $veiculoModel->listarCadastrados();
@@ -55,6 +96,27 @@ class PatioController
         public function entrada(): void
         {
                 $veiculo = new VeiculoModel();
-                require __DIR__ . '/../Views/patio/entrada.php';
+
+
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $placa = $_POST['placa'] ?? '';
+                        $modelo = $_POST['modelo'] ?? '';
+                        $tipo = $_POST['tipo'] ?? '';
+
+                        if (!empty($placa) && !empty($modelo) && !empty($tipo)) {
+
+                                // Executa o cadastro enviando as strings validadas
+
+                                $resultado = $veiculo->cadastrarVeiculo($placa, $modelo, $tipo);
+
+                                if ($resultado === true) {
+                                        header('Location: index.php?cadastro=sucesso');
+                                        exit;
+                                } else {
+                                        header('Location: index.php?cadastro=erro');
+                                        exit;
+                                }
+                        }
+                }
         }
 }

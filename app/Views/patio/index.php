@@ -17,15 +17,38 @@
 <body>
 
         <h1>Estacionamento</h1>
+        <?php require __DIR__ . '/entrada.php'; ?>
         <?php if (isset($mensagemErro)): ?>
                 <p style="color: red;">
                         <?= htmlspecialchars($mensagemErro) ?>
                 </p>
         <?php endif; ?>
 
-        <?php if (($_GET['entrada'] ?? '') === 'sucesso'): ?>
+        <?php if (($_GET['cadastro'] ?? '') === 'sucesso'): ?>
+                <p style="color: green;">
+                        Veículo cadastrado com sucesso!
+                </p>
+        <?php endif; ?>
+
+        <?php if (($_GET['cadastro'] ?? '') === 'erro'): ?>
+                <p style="color: red;">
+                        Não foi possível cadastrar o veículo.
+                </p>
+        <?php endif; ?>
+
+        <?php if (
+                $_SERVER['REQUEST_METHOD'] !== 'POST' &&
+                ($_GET['entrada'] ?? '') === 'sucesso'
+        ):  ?>
                 <p style="color: green;">
                         Entrada do veículo registrada com sucesso!
+                </p>
+        <?php endif; ?>
+
+
+        <?php if (($_GET['saida'] ?? '') === 'sucesso'): ?>
+                <p style="color: green;">
+                        Saída do veículo registrada com sucesso!
                 </p>
         <?php endif; ?>
 
@@ -48,6 +71,7 @@
                                         <th>Tipo</th>
                                         <th>Entrada</th>
                                         <th>Horas decorridas</th>
+                                        <th>Ação</th>
                                 </tr>
                         </thead>
 
@@ -60,6 +84,14 @@
                                                 <td><?= htmlspecialchars($veiculo['tipo']) ?></td>
                                                 <td><?= htmlspecialchars($veiculo['data_entrada_formatada']) ?></td>
                                                 <td><?= htmlspecialchars((string) $veiculo['hora_decorridas']) ?></td>
+                                                <td>
+                                                        <form method="post">
+                                                                <input type="hidden" name="id_movimentacao" value="<?= (int) $veiculo['movimentacao_id'] ?>">
+                                                                <button type="submit" name="acao" value="registrar_saida">
+                                                                        Registrar saída
+                                                                </button>
+                                                        </form>
+                                                </td>
                                         </tr>
                                 <?php endforeach; ?>
                         </tbody>
