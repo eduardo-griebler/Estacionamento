@@ -1,4 +1,5 @@
-<h2>Cadastrar veículo</h2>
+<div class="cadastro">
+        <h2>Cadastrar veículo</h2>
 
 <form action="" method="post">
 
@@ -20,8 +21,9 @@
 
         <br><br>
 
-        <button type="submit" name="acao" value="cadastrar_veiculo">
+        <button type="submit" name="acao" value="cadastrar_veiculo" class="button">
                 Cadastrar veículo
         </button>
 
 </form>
+</div>
