@@ -100,7 +100,10 @@
                                                                         ?>
                                                                 </td>
 
-                                                                <td>
+
+                                                                <td
+                                                                        class="valor-atual"
+                                                                        data-entrada="<?= htmlspecialchars((string) ($veiculo['data_entrada'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
                                                                         R$ <?= number_format(
                                                                                         max(1, ceil((float) $veiculo['hora_decorridas'])) * 4.5,
                                                                                         2,
@@ -108,6 +111,9 @@
                                                                                         '.'
                                                                                 ) ?>
                                                                 </td>
+
+
+
                                                                 <td>
                                                                         <form method="post">
                                                                                 <input type="hidden" name="id_movimentacao" value="<?= (int) $veiculo['movimentacao_id'] ?>">
@@ -162,6 +168,7 @@
                         <?php endif; ?>
                 </div>
         </div>
+        <script src="js/estacionamento.js"></script>
 </body>
 
 </html>
